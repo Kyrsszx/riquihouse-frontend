@@ -1,0 +1,56 @@
+/* Layout general */
+
+.app-container{
+  display:flex;
+  height:100vh;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Sidebar */
+
+.sidebar{
+  width:220px;
+  background:#1f2937;
+  color:white;
+  padding:20px;
+}
+
+.sidebar h2{
+  margin-bottom:30px;
+}
+
+.sidebar ul{
+  list-style:none;
+  padding:0;
+}
+
+.sidebar li{
+  margin-bottom:15px;
+}
+
+.sidebar a{
+  color:white;
+  text-decoration:none;
+}
+
+/* Contenido principal */
+
+.main-content{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+}
+
+/* Navbar */
+
+.navbar{
+  background:#f3f4f6;
+  padding:15px 25px;
+  border-bottom:1px solid #ddd;
+}
+
+/* Área de páginas */
+
+.page-content{
+  padding:25px;
+}
