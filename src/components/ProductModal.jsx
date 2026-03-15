@@ -1,65 +1,100 @@
 import { useState } from "react";
 import { actualizarProducto } from "../services/productoService";
+import "../styles/modal.css";
 
 function ProductModal({ producto, cerrarModal, recargarProductos }) {
   const [nombre, setNombre] = useState(producto.nombre);
-  // Asumimos que el producto trae 'precio' o 'precio_venta'
-  const [precio, setPrecio] = useState(producto.precio_venta || producto.precio || "");
+  const [precio, setPrecio] = useState(producto.precio_venta ?? producto.precio ?? "");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const guardarCambios = async (e) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
+
     try {
       await actualizarProducto(producto.id_producto, {
-        nombre: nombre,
-        precio_venta: parseFloat(precio), // <--- Coincide con tu Backend
-        stock_actual: producto.stock_actual // Mantenemos el stock intacto
+        nombre,
+        precio_venta: parseFloat(precio),
+        stock_actual: producto.stock_actual,
       });
-      alert("¡Producto actualizado!");
-      recargarProductos(); // Refresca la tabla por detrás
-      cerrarModal(); // Cierra la ventanita
-    } catch (error) {
-      alert("Error al actualizar el producto");
+      recargarProductos();
+      cerrarModal();
+    } catch (err) {
+      setError("Error al actualizar el producto. Intenta de nuevo.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-box" style={{ background: "white", padding: "20px", borderRadius: "8px", maxWidth: "400px" }}>
-        <h3 style={{ marginTop: 0 }}>✏️ Editar Producto</h3>
-        
-        <form onSubmit={guardarCambios}>
-          <div style={{ marginBottom: "15px" }}>
-            <label style={{ display: "block", fontWeight: "bold" }}>Nombre del Producto:</label>
-            <input 
-              type="text" 
-              value={nombre} 
-              onChange={(e) => setNombre(e.target.value)} 
-              required 
-              style={{ width: "100%", padding: "8px", boxSizing: "border-box" }}
-            />
-          </div>
+    <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && cerrarModal()}>
+      <div className="modal modal-sm">
 
-          <div style={{ marginBottom: "20px" }}>
-            <label style={{ display: "block", fontWeight: "bold" }}>Precio de Venta (S/.):</label>
-            <input 
-              type="number" 
-              step="0.01" 
-              value={precio} 
-              onChange={(e) => setPrecio(e.target.value)} 
-              required 
-              style={{ width: "100%", padding: "8px", boxSizing: "border-box" }}
-            />
+        {/* Header */}
+        <div className="modal-header">
+          <div>
+            <h3 className="modal-title">Editar Producto</h3>
+            <p className="modal-subtitle">ID #{producto.id_producto}</p>
           </div>
+          <button className="modal-close" onClick={cerrarModal}>✕</button>
+        </div>
 
-          <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
-            <button type="button" className="btn btn-secondary" style={{ background: "#6c757d", color: "white" }} onClick={cerrarModal}>
-              Cancelar
-            </button>
-            <button type="submit" className="btn btn-primary" style={{ background: "#0d6efd" }}>
-              Guardar Cambios
-            </button>
-          </div>
-        </form>
+        {/* Body */}
+        <div className="modal-body">
+
+          {error && (
+            <div className="login-error" style={{ marginBottom: "var(--space-md)" }}>
+              <span>⚠️</span> {error}
+            </div>
+          )}
+
+          <form id="form-producto" onSubmit={guardarCambios}>
+
+            <div className="form-group">
+              <label className="form-label">Nombre del Producto</label>
+              <input
+                type="text"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+                placeholder="Ej: Croissant de mantequilla"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Precio de Venta (S/.)</label>
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                value={precio}
+                onChange={(e) => setPrecio(e.target.value)}
+                placeholder="0.00"
+                required
+              />
+              <span className="form-hint">Ingresa el precio en soles peruanos</span>
+            </div>
+
+          </form>
+        </div>
+
+        {/* Footer */}
+        <div className="modal-footer">
+          <button className="btn btn-secondary" onClick={cerrarModal} disabled={loading}>
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            form="form-producto"
+            className="btn btn-primary"
+            disabled={loading}
+          >
+            {loading ? "Guardando..." : "Guardar Cambios"}
+          </button>
+        </div>
+
       </div>
     </div>
   );
