@@ -1,0 +1,301 @@
+/* ============================================================
+   RIQUIHOUSE — table.css
+   ProductTable + ProductRow + tablas generales
+   ============================================================ */
+
+/* ── Contenedor de tabla ─────────────────────────────────────── */
+.table-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  animation: fadeIn 0.35s ease both;
+}
+
+/* ── Toolbar (búsqueda + acciones) ──────────────────────────── */
+.table-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-lg);
+  border-bottom: 1px solid var(--border-subtle);
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.table-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex: 1;
+  min-width: 0;
+}
+
+.table-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+}
+
+/* Search input dentro de toolbar */
+.table-search {
+  position: relative;
+  flex: 1;
+  max-width: 320px;
+}
+
+.table-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+
+.table-search input {
+  padding-left: 36px;
+  width: 100%;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  height: 36px;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  outline: none;
+}
+.table-search input:focus {
+  border-color: var(--gold-dark);
+  box-shadow: 0 0 0 3px rgba(212, 168, 67, 0.1);
+}
+
+/* Filtros tipo pill */
+.table-filters {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.filter-chip {
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+.filter-chip:hover {
+  border-color: var(--border-default);
+  color: var(--text-primary);
+}
+.filter-chip.active {
+  background: var(--gold-muted);
+  border-color: var(--border-strong);
+  color: var(--gold-light);
+}
+
+/* ── Tabla ───────────────────────────────────────────────────── */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+/* Head */
+.data-table thead tr {
+  background: #d8cfc0;
+  border-bottom: 1px solid var(--border-default);
+}
+
+.data-table th {
+  padding: var(--space-sm) var(--space-lg);
+  text-align: left;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.data-table th.sortable {
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+.data-table th.sortable:hover { color: var(--gold-light); }
+.data-table th.sorted { color: var(--gold); }
+
+.sort-icon {
+  display: inline-block;
+  margin-left: 4px;
+  opacity: 0.5;
+  font-size: 0.65rem;
+}
+th.sorted .sort-icon { opacity: 1; color: var(--gold); }
+
+/* Body */
+.data-table tbody tr {
+  border-bottom: 1px solid var(--border-subtle);
+  transition: background var(--transition-fast);
+}
+
+.data-table tbody tr:last-child { border-bottom: none; }
+
+.data-table tbody tr:hover {
+  background: var(--bg-elevated);
+}
+
+.data-table td {
+  padding: var(--space-md) var(--space-lg);
+  color: var(--text-secondary);
+  vertical-align: middle;
+}
+
+/* Columna nombre / principal */
+.data-table .col-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.data-table .col-id {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.data-table .col-price {
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  color: var(--gold-light);
+}
+
+.data-table .col-stock {
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+
+.col-stock.low    { color: var(--danger); }
+.col-stock.medium { color: var(--warning); }
+.col-stock.ok     { color: var(--success); }
+
+/* Columna de acciones */
+.col-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  justify-content: flex-end;
+}
+
+.action-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  transition: all var(--transition-fast);
+}
+
+.action-btn:hover          { background: var(--bg-hover); color: var(--text-primary); border-color: var(--border-subtle); }
+.action-btn.edit:hover     { background: var(--gold-muted); color: var(--gold-light); border-color: var(--border-default); }
+.action-btn.delete:hover   { background: var(--danger-bg);  color: var(--danger); border-color: rgba(224,96,96,0.3); }
+.action-btn.view:hover     { background: var(--info-bg);    color: var(--info); border-color: rgba(106,171,206,0.3); }
+
+/* ── Imagen de producto en tabla ─────────────────────────────── */
+.product-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  background: var(--bg-hover);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.product-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.product-cell-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.product-cell-name {
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+}
+
+.product-cell-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+/* ── Paginación ──────────────────────────────────────────────── */
+.table-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  border-top: 1px solid var(--border-subtle);
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.pagination-info {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.page-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+.page-btn:hover   { background: var(--bg-hover); color: var(--text-primary); border-color: var(--border-default); }
+.page-btn.active  { background: var(--gold-muted); color: var(--gold-light); border-color: var(--border-strong); }
+.page-btn:disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
+
+/* ── Tabla compacta (variante) ──────────────────────────────── */
+.data-table.compact th,
+.data-table.compact td {
+  padding: 8px var(--space-md);
+}

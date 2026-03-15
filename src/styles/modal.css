@@ -1,0 +1,227 @@
+/* ============================================================
+   RIQUIHOUSE — modal.css
+   ProductModal + diálogos generales
+   ============================================================ */
+
+/* ── Overlay ─────────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  animation: overlayIn 0.2s ease both;
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Modal box ───────────────────────────────────────────────── */
+.modal {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-lg), 0 0 40px rgba(212, 168, 67, 0.06);
+  animation: modalIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+  overflow: hidden;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.95) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-sm { max-width: 420px; }
+.modal-lg { max-width: 720px; }
+.modal-xl { max-width: 900px; }
+
+/* ── Header ──────────────────────────────────────────────────── */
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-lg) var(--space-xl);
+  border-bottom: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+}
+
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  letter-spacing: 0.02em;
+}
+
+.modal-subtitle {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.modal-close {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+.modal-close:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--border-default);
+}
+
+/* ── Body ────────────────────────────────────────────────────── */
+.modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-xl);
+}
+
+/* ── Footer ──────────────────────────────────────────────────── */
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-xl);
+  border-top: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+}
+
+.modal-footer.space-between {
+  justify-content: space-between;
+}
+
+/* ── Confirm dialog ──────────────────────────────────────────── */
+.confirm-modal {
+  max-width: 400px;
+  text-align: center;
+}
+
+.confirm-modal .modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-2xl) var(--space-xl);
+}
+
+.confirm-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+.confirm-icon.danger  { background: var(--danger-bg);  color: var(--danger); }
+.confirm-icon.warning { background: var(--warning-bg); color: var(--warning); }
+.confirm-icon.success { background: var(--success-bg); color: var(--success); }
+
+.confirm-title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.confirm-message {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  max-width: 280px;
+}
+
+/* ── Toast / notificaciones ──────────────────────────────────── */
+.toast-container {
+  position: fixed;
+  top: calc(var(--navbar-height) + var(--space-md));
+  right: var(--space-lg);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-lg);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  box-shadow: var(--shadow-lg);
+  font-size: 0.875rem;
+  min-width: 280px;
+  max-width: 380px;
+  pointer-events: auto;
+  animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.toast.exit {
+  animation: toastOut 0.25s ease forwards;
+}
+
+@keyframes toastOut {
+  to { opacity: 0; transform: translateX(20px); }
+}
+
+.toast-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.toast-text { flex: 1; color: var(--text-primary); }
+.toast-title { font-weight: 500; font-size: 0.875rem; }
+.toast-desc  { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
+
+.toast.success { border-color: rgba(109, 189, 138, 0.3); }
+.toast.success .toast-icon { color: var(--success); }
+
+.toast.error { border-color: rgba(224, 96, 96, 0.3); }
+.toast.error .toast-icon { color: var(--danger); }
+
+.toast.warning { border-color: rgba(232, 168, 74, 0.3); }
+.toast.warning .toast-icon { color: var(--warning); }
+
+.toast.info { border-color: rgba(106, 171, 206, 0.3); }
+.toast.info .toast-icon { color: var(--info); }
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .modal-overlay { padding: var(--space-md); align-items: flex-end; }
+  .modal { border-bottom-left-radius: 0; border-bottom-right-radius: 0; max-height: 85vh; }
+  .toast-container { right: var(--space-md); left: var(--space-md); }
+  .toast { min-width: unset; max-width: unset; }
+}

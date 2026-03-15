@@ -1,84 +1,139 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUsuario } from "../services/authService";
+import "../styles/login.css";
 
 function Login({ onLogin }) {
-  const [usuario, setUsuario] = useState("");
+  const [usuario, setUsuario]   = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  
+  const [error, setError]       = useState("");
+  const [loading, setLoading]   = useState(false);
+  const [verPwd, setVerPwd]     = useState(false);
+
   const navigate = useNavigate();
 
   const manejarSubmit = async (e) => {
     e.preventDefault();
-    setError(""); 
+    setError("");
+    setLoading(true);
 
     try {
       const respuesta = await loginUsuario({ usuario, password });
-      
-      // Guardamos al usuario en memoria
       localStorage.setItem("usuarioLogueado", JSON.stringify(respuesta.usuario));
       onLogin();
-      
-      // 🚀 REDIRECCIÓN INTELIGENTE POR ROL (AQUÍ ES DONDE VA)
-      // Lo convertimos a minúscula por si en la base de datos dice "Vendedor" o "vendedor"
-      const rolUsuario = respuesta.usuario.rol.toLowerCase();
-      
-      if (rolUsuario === 'administrador') {
-        navigate("/"); 
-      } else if (rolUsuario === 'vendedor') {
-        navigate("/ventas"); 
-      } else if (rolUsuario === 'cocinero') {
-        navigate("/tablero-cocina"); 
-      }
+
+      const rol = respuesta.usuario.rol.toLowerCase();
+      if (rol === "administrador")  navigate("/");
+      else if (rol === "vendedor")  navigate("/ventas");
+      else if (rol === "cocinero")  navigate("/tablero-cocina");
 
     } catch (err) {
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", background: "#f4f4f4" }}>
-      <div style={{ background: "white", padding: "40px", borderRadius: "8px", boxShadow: "0 4px 8px rgba(0,0,0,0.1)", width: "100%", maxWidth: "400px" }}>
-        
-        <h2 style={{ textAlign: "center", marginBottom: "20px", color: "#333" }}>🥞 Riqui House</h2>
-        <h4 style={{ textAlign: "center", marginBottom: "20px", color: "#666" }}>Iniciar Sesión</h4>
+    <div className="login-page">
 
-        {error && (
-          <div style={{ background: "#f8d7da", color: "#721c24", padding: "10px", borderRadius: "4px", marginBottom: "15px", textAlign: "center" }}>
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={manejarSubmit}>
-          <div style={{ marginBottom: "15px" }}>
-            <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>Usuario</label>
-            <input 
-              type="text" 
-              value={usuario} 
-              onChange={(e) => setUsuario(e.target.value)} 
-              required 
-              style={{ width: "100%", padding: "10px", borderRadius: "4px", border: "1px solid #ccc", boxSizing: "border-box" }}
-            />
-          </div>
-
-          <div style={{ marginBottom: "20px" }}>
-            <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>Contraseña</label>
-            <input 
-              type="password" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-              required 
-              style={{ width: "100%", padding: "10px", borderRadius: "4px", border: "1px solid #ccc", boxSizing: "border-box" }}
-            />
-          </div>
-
-          <button type="submit" style={{ width: "100%", padding: "10px", background: "#0d6efd", color: "white", border: "none", borderRadius: "4px", fontSize: "16px", cursor: "pointer", fontWeight: "bold" }}>
-            Entrar al Sistema
-          </button>
-        </form>
-
+      {/* Panel visual izquierdo */}
+      <div className="login-visual">
+        <div className="login-deco">
+          <div className="login-deco-line" />
+          <div className="login-deco-line" />
+          <div className="login-deco-line" />
+        </div>
+        <div className="login-visual-content">
+          <div className="login-logo-mark">🍰</div>
+          <h1 className="login-visual-title">
+            El sabor de<br /><em>la tradición</em>
+          </h1>
+          <p className="login-visual-desc">
+            Sistema de gestión interno para pastelería RiquiHouse.
+            Control de producción, ventas e inventario en un solo lugar.
+          </p>
+        </div>
       </div>
+
+      {/* Panel formulario */}
+      <div className="login-form-panel">
+        <div className="login-form-box">
+
+          <div className="login-form-header">
+            <h2 className="login-form-title">Bienvenido</h2>
+            <p className="login-form-subtitle">Ingresa tus credenciales para continuar</p>
+          </div>
+
+          {error && (
+            <div className="login-error">
+              <span>⚠️</span>
+              {error}
+            </div>
+          )}
+
+          <form className="login-form" onSubmit={manejarSubmit}>
+
+            <div className="login-field">
+              <label className="login-label">Usuario</label>
+              <div className="login-input-wrapper">
+                <span className="login-input-icon"></span>
+                <input
+                  className="login-input"
+                  type="text"
+                  placeholder="Tu nombre de usuario"
+                  value={usuario}
+                  onChange={(e) => setUsuario(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="login-field">
+              <label className="login-label">Contraseña</label>
+              <div className="login-input-wrapper">
+                <span className="login-input-icon"></span>
+                <input
+                  className="login-input"
+                  type={verPwd ? "text" : "password"}
+                  placeholder="Tu contraseña"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <button
+                  type="button"
+                  className="login-pwd-toggle"
+                  onClick={() => setVerPwd(!verPwd)}
+                  tabIndex={-1}
+                >
+                  {verPwd ? "🔒" : "👁️"}
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="login-submit"
+              disabled={loading}
+            >
+              {loading ? (
+                <span className="login-loading">
+                  <span className="spinner" />
+                  Ingresando...
+                </span>
+              ) : (
+                "Entrar al Sistema"
+              )}
+            </button>
+
+          </form>
+
+          <p className="login-footer">RiquiHouse · Sistema interno</p>
+
+        </div>
+      </div>
+
     </div>
   );
 }
