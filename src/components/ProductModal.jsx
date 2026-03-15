@@ -1,106 +1,68 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { actualizarProducto } from "../services/productoService";
 
 function ProductModal({ producto, cerrarModal, recargarProductos }) {
+  const [nombre, setNombre] = useState(producto.nombre);
+  // Asumimos que el producto trae 'precio' o 'precio_venta'
+  const [precio, setPrecio] = useState(producto.precio_venta || producto.precio || "");
 
-  const [nombre, setNombre] = useState("");
-  const [precio, setPrecio] = useState("");
-  const [stock, setStock] = useState("");
-
-  useEffect(() => {
-    if (producto) {
-      setNombre(producto.nombre);
-      setPrecio(producto.precio_venta);
-      setStock(producto.stock_actual);
-    }
-  }, [producto]);
-
-  const guardarEdicion = async (e) => {
+  const guardarCambios = async (e) => {
     e.preventDefault();
-
-    const productoActualizado = {
-      nombre,
-      precio_venta: parseFloat(precio),
-      stock_actual: parseInt(stock)
-    };
-
-    await actualizarProducto(producto.id_producto, productoActualizado);
-
-    recargarProductos();
-    cerrarModal();
+    try {
+      await actualizarProducto(producto.id_producto, {
+        nombre: nombre,
+        precio_venta: parseFloat(precio), // <--- Coincide con tu Backend
+        stock_actual: producto.stock_actual // Mantenemos el stock intacto
+      });
+      alert("¡Producto actualizado!");
+      recargarProductos(); // Refresca la tabla por detrás
+      cerrarModal(); // Cierra la ventanita
+    } catch (error) {
+      alert("Error al actualizar el producto");
+    }
   };
 
-  if (!producto) return null;
-
   return (
-    <div style={overlayStyle}>
-      <div style={modalStyle}>
-
-        <h2>Editar Producto</h2>
-
-        <form onSubmit={guardarEdicion}>
-
-          <div>
-            <label>Nombre</label>
-            <input
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
+    <div className="modal-overlay">
+      <div className="modal-box" style={{ background: "white", padding: "20px", borderRadius: "8px", maxWidth: "400px" }}>
+        <h3 style={{ marginTop: 0 }}>✏️ Editar Producto</h3>
+        
+        <form onSubmit={guardarCambios}>
+          <div style={{ marginBottom: "15px" }}>
+            <label style={{ display: "block", fontWeight: "bold" }}>Nombre del Producto:</label>
+            <input 
+              type="text" 
+              value={nombre} 
+              onChange={(e) => setNombre(e.target.value)} 
+              required 
+              style={{ width: "100%", padding: "8px", boxSizing: "border-box" }}
             />
           </div>
 
-          <div>
-            <label>Precio</label>
-            <input
-              type="number"
-              step="0.01"
-              value={precio}
-              onChange={(e) => setPrecio(e.target.value)}
+          <div style={{ marginBottom: "20px" }}>
+            <label style={{ display: "block", fontWeight: "bold" }}>Precio de Venta (S/.):</label>
+            <input 
+              type="number" 
+              step="0.01" 
+              value={precio} 
+              onChange={(e) => setPrecio(e.target.value)} 
+              required 
+              style={{ width: "100%", padding: "8px", boxSizing: "border-box" }}
             />
           </div>
 
-          <div>
-            <label>Stock</label>
-            <input
-              type="number"
-              value={stock}
-              onChange={(e) => setStock(e.target.value)}
-            />
+          <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+            <button type="button" className="btn btn-secondary" style={{ background: "#6c757d", color: "white" }} onClick={cerrarModal}>
+              Cancelar
+            </button>
+            <button type="submit" className="btn btn-primary" style={{ background: "#0d6efd" }}>
+              Guardar Cambios
+            </button>
           </div>
-
-          <br />
-
-          <button type="submit">
-            Guardar
-          </button>
-
-          <button type="button" onClick={cerrarModal}>
-            Cancelar
-          </button>
-
         </form>
-
       </div>
     </div>
   );
 }
-
-const overlayStyle = {
-  position: "fixed",
-  top: 0,
-  left: 0,
-  width: "100%",
-  height: "100%",
-  background: "rgba(0,0,0,0.5)",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center"
-};
-
-const modalStyle = {
-  background: "white",
-  padding: "25px",
-  borderRadius: "10px",
-  minWidth: "300px"
-};
 
 export default ProductModal;
