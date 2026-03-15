@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom"; // <-- Importamos Navigate para patear intrusos
+import { Navigate } from "react-router-dom";
 import { obtenerProductos } from "../services/productoService";
 import { obtenerInsumos } from "../services/insumoService";
 import { obtenerVentas } from "../services/ventaService";
@@ -7,24 +7,22 @@ import { obtenerProduccion } from "../services/produccionService";
 import "../styles/dashboard.css";
 
 function Dashboard() {
-  // 🛡️ EL GUARDIA DE SEGURIDAD
+
   const usuarioGuardado = localStorage.getItem("usuarioLogueado");
   const usuario = usuarioGuardado ? JSON.parse(usuarioGuardado) : null;
-
-  // Estados para guardar los números de cada tarjeta
   const [totalProductos, setTotalProductos] = useState(0);
   const [totalInsumos, setTotalInsumos] = useState(0);
   const [totalVentas, setTotalVentas] = useState(0);
   const [totalProduccion, setTotalProduccion] = useState(0);
 
   useEffect(() => {
-    // Solo cargamos los datos si es administrador
+
     if (usuario && usuario.rol === 'administrador') {
       cargarDatos();
     }
   }, [usuario]);
 
-  // Si NO es administrador, lo pateamos a su respectiva área
+
   if (usuario && usuario.rol === 'vendedor') return <Navigate to="/ventas" />;
   if (usuario && usuario.rol === 'cocinero') return <Navigate to="/tablero-cocina" />;
 
