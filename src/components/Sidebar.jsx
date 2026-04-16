@@ -1,18 +1,20 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate} from "react-router-dom";
 import "../styles/layout.css";
 
 function Sidebar() {
   const usuarioGuardado = localStorage.getItem("usuarioLogueado");
   const usuario = usuarioGuardado ? JSON.parse(usuarioGuardado) : null;
   const location = useLocation();
+  const navigate = useNavigate();
 
   if (!usuario) return null;
 
   const rol = usuario.rol.toLowerCase();
 
   const cerrarSesion = () => {
-    localStorage.removeItem("usuarioLogueado");    
-    window.location.href = "/login";
+    localStorage.removeItem("usuarioLogueado");
+    navigate("/login");
+    window.location.href = "/login";    
   };
   
   const isActive = (path) => location.pathname = path;
