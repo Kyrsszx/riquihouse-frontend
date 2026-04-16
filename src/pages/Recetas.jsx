@@ -7,13 +7,9 @@ function Recetas() {
   const [recetas, setRecetas] = useState([]);
   const [productos, setProductos] = useState([]);
   const [insumos, setInsumos] = useState([]);
-
-  // Formulario superior (Agregar nuevo ingrediente extra)
   const [idProducto, setIdProducto] = useState("");
   const [idInsumo, setIdInsumo] = useState("");
   const [cantidad, setCantidad] = useState("");
-
-  // ESTADOS PARA EL MODAL DE EDICIÓN
   const [modoFormulario, setModoFormulario] = useState("cerrado");
   const [recetaEditando, setRecetaEditando] = useState(null);
   const [idInsumoEdit, setIdInsumoEdit] = useState("");
@@ -50,12 +46,10 @@ function Recetas() {
     await eliminarReceta(idReceta);
     cargarDatos(); 
   };
-
-  // FUNCIONES PARA EDITAR
   const abrirEdicion = (item) => {
     setRecetaEditando(item);
-    setIdInsumoEdit(item.id_insumo); // Pre-selecciona el insumo actual
-    setCantidadEdit(item.cantidad_necesaria); // Pre-llena la cantidad actual
+    setIdInsumoEdit(item.id_insumo);
+    setCantidadEdit(item.cantidad_necesaria);
     setModoFormulario("editar");
   };
 
@@ -70,8 +64,6 @@ function Recetas() {
     setRecetaEditando(null);
     cargarDatos();
   };
-
-  // Agrupar las recetas por nombre de producto
   const recetasAgrupadas = recetas.reduce((grupos, receta) => {
     if (!grupos[receta.producto]) grupos[receta.producto] = [];
     grupos[receta.producto].push(receta);
@@ -81,8 +73,6 @@ function Recetas() {
   return (
     <div>
       <h1 className="page-title">Libro de Recetas Oficial 📖</h1>
-
-      {/* BARRA SUPERIOR PARA AGREGAR INGREDIENTE EXTRA */}
       <form onSubmit={guardarIngredienteExtra} style={{ background: "#e3f2fd", padding: "15px", marginBottom: "20px", borderRadius: "8px" }}>
         <h4 style={{ marginTop: 0, color: "#004085" }}>➕ Agregar ingrediente nuevo a una receta existente:</h4>
         <div style={{ display: "flex", gap: "10px", alignItems: "center", flexWrap: "wrap" }}>
@@ -98,8 +88,6 @@ function Recetas() {
           <button type="submit" className="btn btn-primary" style={{ background: "#0d6efd" }}>Agregar Insumo</button>
         </div>
       </form>
-
-      {/* EL LIBRO AGRUPADO CON BOTONES DE EDITAR Y ELIMINAR */}
       <div style={{ display: "grid", gap: "20px", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))" }}>
         {Object.keys(recetasAgrupadas).length === 0 ? (
           <p>Aún no hay recetas registradas.</p>
@@ -115,8 +103,6 @@ function Recetas() {
                     <span>{item.insumo}</span>
                     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                       <strong style={{ color: "green" }}>{item.cantidad_necesaria}</strong>
-                      
-                      {/* BOTONES DE ACCIÓN */}
                       <button className="btn btn-warning" style={{ padding: "2px 6px", fontSize: "12px" }} onClick={() => abrirEdicion(item)}>
                         Editar
                       </button>
@@ -132,8 +118,6 @@ function Recetas() {
           ))
         )}
       </div>
-
-      {/* EL MODAL DE EDICIÓN (Igualito al de Productos) */}
       {modoFormulario === "editar" && recetaEditando && (
         <div className="modal-overlay">
           <div className="modal-box" style={{ background: "white", padding: "20px", borderRadius: "8px", maxWidth: "400px" }}>
@@ -142,7 +126,6 @@ function Recetas() {
             <form onSubmit={guardarEdicion}>
               <div className="form-group" style={{ marginBottom: "15px" }}>
                 <label style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>Producto:</label>
-                {/* El producto no se edita aquí, solo se muestra como referencia */}
                 <input type="text" value={recetaEditando.producto} disabled style={{ width: "100%", padding: "8px", background: "#e9ecef" }} />
               </div>
               
@@ -167,11 +150,9 @@ function Recetas() {
                 </button>
               </div>
             </form>
-
           </div>
         </div>
       )}
-
     </div>
   );
 }

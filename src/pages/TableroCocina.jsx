@@ -7,7 +7,6 @@ function TableroCocina() {
   useEffect(() => {
     const cargarDatos = async () => {
       const data = await obtenerProductos();
-      // Ordenamos automáticamente de menor stock a mayor stock
       const dataOrdenada = data.sort((a, b) => a.stock_actual - b.stock_actual);
       setProductos(dataOrdenada);
     };
@@ -21,7 +20,6 @@ function TableroCocina() {
 
       <div style={{ display: "grid", gap: "15px", gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))" }}>
         {productos.map((prod) => {
-          // Si el stock es menor a 10, lo pintamos de rojo como alerta
           const esUrgente = prod.stock_actual < 10;
           
           return (

@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000/api/insumos";
+const API_URL = "https://riquihouse-backend.onrender.com/api/insumos";
 
 export const obtenerInsumos = async () => {
   const res = await fetch(API_URL);

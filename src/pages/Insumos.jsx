@@ -4,40 +4,27 @@ import "../styles/globals.css";
 import "../styles/table.css";
 import "../styles/modal.css";
 
-// ── Umbral de stock mínimo ──────────────────────────────────────
 const STOCK_MINIMO = 20;
 
 function Insumos() {
   const [insumos, setInsumos]           = useState([]);
-  const [alertas, setAlertas]           = useState([]);   // CA1 — insumos con bajo stock
+  const [alertas, setAlertas]           = useState([]);
   const [modoFormulario, setModoFormulario] = useState("cerrado");
-
-  // Nuevo insumo
   const [nombre, setNombre]   = useState("");
   const [costo, setCosto]     = useState("");
   const [stock, setStock]     = useState("");
-
-  // Agregar stock existente
   const [idSeleccionado, setIdSeleccionado]   = useState("");
   const [cantidadExtra, setCantidadExtra]     = useState("");
-
-  // Editar insumo
   const [insumoEditando, setInsumoEditando]   = useState(null);
   const [nombreEdit, setNombreEdit]           = useState("");
   const [costoEdit, setCostoEdit]             = useState("");
-
-  // Modal confirmar eliminar
   const [insumoAEliminar, setInsumoAEliminar] = useState(null);
 
   useEffect(() => { cargarInsumos(); }, []);
-
-  // CA1 — detectar stock mínimo cada vez que cargan los datos
   const cargarInsumos = async () => {
     const data = await obtenerInsumos();
     setInsumos(data);
     if (data.length > 0) setIdSeleccionado(data[0].id_insumo);
-
-    // CA1: filtramos los que están bajo el mínimo
     const bajoStock = data.filter(i => parseFloat(i.stock_actual) < STOCK_MINIMO);
     setAlertas(bajoStock);
   };
@@ -59,13 +46,11 @@ function Insumos() {
       });
       setNombre(""); setCosto(""); setStock("");
       setModoFormulario("cerrado");
-      cargarInsumos(); // CA3 — recalcula alertas tras reposición
+      cargarInsumos();
     } catch {
       alert("Error al guardar el insumo");
     }
   };
-
-  // CA3 — al sumar stock, si supera el mínimo la alerta desaparece
   const agregarStockExistente = async (e) => {
     e.preventDefault();
     try {
@@ -78,7 +63,7 @@ function Insumos() {
       });
       setCantidadExtra("");
       setModoFormulario("cerrado");
-      cargarInsumos(); // CA3 — recalcula alertas
+      cargarInsumos();
     } catch {
       alert("Error al actualizar el stock");
     }
@@ -111,8 +96,6 @@ function Insumos() {
 
   return (
     <div className="animate-in">
-
-      {/* ── Cabecera ── */}
       <div className="page-header">
         <div className="page-header-left">
           <h1 className="page-title">Almacén de <span>Insumos</span></h1>
@@ -133,8 +116,6 @@ function Insumos() {
           </button>
         </div>
       </div>
-
-      {/* ── CA2 — Banner de alertas de bajo stock ── */}
       {alertas.length > 0 && (
         <div style={{
           background: "rgba(192, 57, 43, 0.08)",
@@ -173,8 +154,6 @@ function Insumos() {
           </p>
         </div>
       )}
-
-      {/* ── Formulario: agregar stock a existente ── */}
       {modoFormulario === "existente" && (
         <div className="card" style={{ marginBottom: "var(--space-lg)" }}>
           <div className="card-header">
@@ -212,8 +191,6 @@ function Insumos() {
           </div>
         </div>
       )}
-
-      {/* ── Formulario: nuevo insumo ── */}
       {modoFormulario === "nuevo" && (
         <div className="card" style={{ marginBottom: "var(--space-lg)" }}>
           <div className="card-header">
@@ -243,8 +220,6 @@ function Insumos() {
           </div>
         </div>
       )}
-
-      {/* ── Formulario: editar insumo ── */}
       {modoFormulario === "editar" && insumoEditando && (
         <div className="card" style={{ marginBottom: "var(--space-lg)" }}>
           <div className="card-header">
@@ -272,7 +247,6 @@ function Insumos() {
         </div>
       )}
 
-      {/* ── Tabla de insumos ── */}
       <div className="table-container">
         <div className="table-toolbar">
           <div className="table-toolbar-left">
@@ -345,8 +319,6 @@ function Insumos() {
           </tbody>
         </table>
       </div>
-
-      {/* ── Modal confirmar eliminar ── */}
       {insumoAEliminar && (
         <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && setInsumoAEliminar(null)}>
           <div className="modal modal-sm">

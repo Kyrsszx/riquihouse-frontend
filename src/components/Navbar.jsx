@@ -36,7 +36,6 @@ function Navbar() {
     return () => clearInterval(intervalo);
   }, []);
 
-  // Cierra panel al hacer click fuera
   useEffect(() => {
     const handler = (e) => {
       if (panelRef.current && !panelRef.current.contains(e.target))
@@ -46,7 +45,6 @@ function Navbar() {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  // CA1 — detecta bajo stock en insumos Y productos
   const verificarStock = async () => {
     try {
       const [insumos, productos] = await Promise.all([
@@ -56,7 +54,6 @@ function Navbar() {
       setAlertasInsumos(insumos.filter(i => parseFloat(i.stock_actual) < STOCK_MIN_INSUMO));
       setAlertasProductos(productos.filter(p => parseInt(p.stock_actual) < STOCK_MIN_PRODUCTO));
     } catch {
-      // silencioso
     }
   };
 
@@ -72,8 +69,6 @@ function Navbar() {
       </div>
 
       <div className="navbar-right">
-
-        {/* ── CA2: Campana de alertas ── */}
         <div style={{ position: "relative" }} ref={panelRef}>
           <button
             className="navbar-notif"
@@ -101,7 +96,6 @@ function Navbar() {
             )}
           </button>
 
-          {/* Panel desplegable */}
           {mostrarPanel && (
             <div style={{
               position: "absolute",
@@ -116,7 +110,6 @@ function Navbar() {
               animation: "fadeIn 0.2s ease both",
             }}>
 
-              {/* Header */}
               <div style={{
                 padding: "var(--space-md) var(--space-lg)",
                 borderBottom: "1px solid var(--border-subtle)",
@@ -141,7 +134,6 @@ function Navbar() {
                   </div>
                 ) : (
                   <>
-                    {/* Sección productos */}
                     {alertasProductos.length > 0 && (
                       <>
                         <div style={{
@@ -165,7 +157,6 @@ function Navbar() {
                       </>
                     )}
 
-                    {/* Sección insumos */}
                     {alertasInsumos.length > 0 && (
                       <>
                         <div style={{
@@ -192,7 +183,6 @@ function Navbar() {
                 )}
               </div>
 
-              {/* Footer */}
               {totalAlertas > 0 && (
                 <div style={{
                   padding: "var(--space-sm) var(--space-lg)",
@@ -216,7 +206,6 @@ function Navbar() {
           )}
         </div>
 
-        {/* Usuario */}
         <div className="navbar-user">
           <div className="navbar-avatar">R</div>
           <span>Panel Administrativo</span>
@@ -227,7 +216,6 @@ function Navbar() {
   );
 }
 
-// Componente fila de alerta reutilizable
 function AlertaFila({ nombre, stock, onClick }) {
   const [hover, setHover] = useState(false);
   return (

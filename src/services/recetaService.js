@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000/api/recetas";
+const API_URL = "https://riquihouse-backend.onrender.com/api/recetas";
 
 export const obtenerRecetas = async () => {
   const res = await fetch(API_URL);
@@ -13,8 +13,6 @@ export const crearReceta = async (receta) => {
   });
   return await res.json();
 };
-
-// <-- AGREGA ESTA NUEVA FUNCIÓN -->
 export const eliminarReceta = async (id) => {
   await fetch(`${API_URL}/${id}`, {
     method: "DELETE"

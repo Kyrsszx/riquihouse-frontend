@@ -32,7 +32,6 @@ function ProductModal({ producto, cerrarModal, recargarProductos }) {
     <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && cerrarModal()}>
       <div className="modal modal-sm">
 
-        {/* Header */}
         <div className="modal-header">
           <div>
             <h3 className="modal-title">Editar Producto</h3>
@@ -41,7 +40,6 @@ function ProductModal({ producto, cerrarModal, recargarProductos }) {
           <button className="modal-close" onClick={cerrarModal}>✕</button>
         </div>
 
-        {/* Body */}
         <div className="modal-body">
 
           {error && (
@@ -80,7 +78,6 @@ function ProductModal({ producto, cerrarModal, recargarProductos }) {
           </form>
         </div>
 
-        {/* Footer */}
         <div className="modal-footer">
           <button className="btn btn-secondary" onClick={cerrarModal} disabled={loading}>
             Cancelar

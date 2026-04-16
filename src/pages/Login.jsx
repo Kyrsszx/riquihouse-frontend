@@ -36,8 +36,6 @@ function Login({ onLogin }) {
 
   return (
     <div className="login-page">
-
-      {/* Panel visual izquierdo */}
       <div className="login-visual">
         <div className="login-deco">
           <div className="login-deco-line" />
@@ -55,8 +53,6 @@ function Login({ onLogin }) {
           </p>
         </div>
       </div>
-
-      {/* Panel formulario */}
       <div className="login-form-panel">
         <div className="login-form-box">
 

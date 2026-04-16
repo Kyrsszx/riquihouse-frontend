@@ -5,8 +5,6 @@ import { crearMerma, obtenerMermas } from "../services/mermaService";
 function Mermas() {
   const [historial, setHistorial] = useState([]);
   const [insumos, setInsumos] = useState([]);
-
-  // Estados del formulario
   const [idInsumo, setIdInsumo] = useState("");
   const [cantidad, setCantidad] = useState("");
   const [motivo, setMotivo] = useState("");
@@ -45,8 +43,6 @@ function Mermas() {
     <div>
       <h1 className="page-title" style={{ color: "#d9534f" }}>⚠️ Reporte de Mermas (Insumos)</h1>
       <p>Registra ingredientes derramados, vencidos o en mal estado para descontarlos del almacén.</p>
-
-      {/* FORMULARIO DE REPORTE */}
       <form onSubmit={registrarAccidente} style={{ background: "#ffebee", padding: "20px", borderRadius: "8px", border: "1px solid #ffcdd2", marginBottom: "30px" }}>
         
         <div style={{ display: "flex", gap: "15px", flexWrap: "wrap", marginBottom: "15px" }}>
@@ -72,8 +68,6 @@ function Mermas() {
           Registrar Pérdida
         </button>
       </form>
-
-      {/* TABLA DE HISTORIAL */}
       <h3>Historial de Mermas</h3>
       <table border="1" width="100%" style={{ background: "white", textAlign: "left" }}>
         <thead style={{ background: "#f8f9fa" }}>

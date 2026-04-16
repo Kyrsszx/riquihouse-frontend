@@ -27,7 +27,7 @@ function Produccion() {
     e.preventDefault();
     try {
       await registrarProduccion({
-        id_usuario: 1, // Nuestro cocinero Carlos
+        id_usuario: 1,
         id_producto: idProducto,
         cantidad_producida: cantidadProducida
       });

@@ -4,8 +4,6 @@ import "../styles/table.css";
 function ProductTable({ productos, onDelete, onEdit }) {
   return (
     <div className="table-container">
-
-      {/* Toolbar */}
       <div className="table-toolbar">
         <div className="table-toolbar-left">
           <div className="table-search">
@@ -14,8 +12,6 @@ function ProductTable({ productos, onDelete, onEdit }) {
           </div>
         </div>
       </div>
-
-      {/* Tabla */}
       <table className="data-table">
         <thead>
           <tr>

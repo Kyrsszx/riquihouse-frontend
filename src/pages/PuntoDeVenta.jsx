@@ -12,9 +12,7 @@ function PuntoDeVenta() {
   const [productoSeleccionado, setProductoSeleccionado] = useState("");
   const [cantidad, setCantidad]                     = useState(1);
   const [procesando, setProcesando]                 = useState(false);
-  const [ticket, setTicket]                         = useState(null); // null = sin ticket, objeto = mostrar ticket
-
-  // Usuario logueado
+  const [ticket, setTicket]                         = useState(null);
   const usuarioGuardado = localStorage.getItem("usuarioLogueado");
   const usuario = usuarioGuardado ? JSON.parse(usuarioGuardado) : null;
 
@@ -35,10 +33,7 @@ function PuntoDeVenta() {
   const agregarAlCarrito = () => {
     const prod = productos.find(p => p.id_producto === parseInt(productoSeleccionado));
     if (!prod) return;
-
     if (cantidad < 1) return;
-
-    // Si el producto ya está en el carrito, sumamos cantidad
     const existe = carrito.find(i => i.id_producto === prod.id_producto);
     const cantidadTotal = existe ? existe.cantidad + parseInt(cantidad) : parseInt(cantidad);
 
@@ -99,8 +94,6 @@ function PuntoDeVenta() {
 
     try {
       const respuesta = await crearVenta(nuevaVenta);
-
-      // Construimos el objeto ticket con toda la info
       setTicket({
         id_venta:    respuesta.id_venta || respuesta.id || "—",
         vendedor:    usuario?.nombre || "Vendedor",
@@ -126,8 +119,6 @@ function PuntoDeVenta() {
 
   return (
     <div className="animate-in">
-
-      {/* ── Cabecera ── */}
       <div className="page-header">
         <div className="page-header-left">
           <h1 className="page-title">Punto de <span>Venta</span></h1>
@@ -136,11 +127,7 @@ function PuntoDeVenta() {
       </div>
 
       <div className="pos-layout">
-
-        {/* ── Panel izquierdo: selector + carrito ── */}
         <div className="pos-products-panel">
-
-          {/* Selector de producto */}
           <div className="card" style={{ marginBottom: "var(--space-lg)" }}>
             <div className="card-header">
               <span className="card-title">Agregar Producto</span>
@@ -174,11 +161,8 @@ function PuntoDeVenta() {
               <button className="btn btn-primary" onClick={agregarAlCarrito}>
                 + Agregar
               </button>
-
             </div>
           </div>
-
-          {/* Carrito */}
           <div className="table-container">
             <div className="table-toolbar">
               <div className="table-toolbar-left">
@@ -239,8 +223,6 @@ function PuntoDeVenta() {
             </table>
           </div>
         </div>
-
-        {/* ── Panel derecho: resumen + cobrar ── */}
         <div className="pos-cart-panel">
           <div className="pos-cart-header">
             <span className="pos-cart-title">Resumen de Venta</span>
@@ -281,10 +263,8 @@ function PuntoDeVenta() {
             </button>
           </div>
         </div>
-
       </div>
 
-      {/* ── Modal Ticket ── */}
       {ticket && (
         <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && cerrarTicket()}>
           <div className="modal modal-sm">
@@ -298,7 +278,6 @@ function PuntoDeVenta() {
             </div>
 
             <div className="modal-body">
-              {/* Cabecera del ticket */}
               <div style={{
                 textAlign: "center",
                 padding: "var(--space-lg) 0 var(--space-md)",
@@ -313,8 +292,6 @@ function PuntoDeVenta() {
                   Panadería & Pastelería
                 </div>
               </div>
-
-              {/* Datos del ticket */}
               <div style={{ display: "flex", flexDirection: "column", gap: "6px", marginBottom: "var(--space-md)" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.82rem" }}>
                   <span style={{ color: "var(--text-muted)" }}>N° Ticket</span>
@@ -329,11 +306,7 @@ function PuntoDeVenta() {
                   <span style={{ color: "var(--text-primary)" }}>{ticket.fecha}</span>
                 </div>
               </div>
-
-              {/* Línea punteada */}
               <div style={{ borderTop: "1px dashed var(--border-default)", margin: "var(--space-md) 0" }} />
-
-              {/* Detalle de productos */}
               <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "var(--space-md)" }}>
                 {ticket.items.map((item, i) => (
                   <div key={i} style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.85rem" }}>
@@ -348,8 +321,6 @@ function PuntoDeVenta() {
                   </div>
                 ))}
               </div>
-
-              {/* Total */}
               <div style={{
                 borderTop: "1px dashed var(--border-default)",
                 paddingTop: "var(--space-md)",
@@ -364,8 +335,6 @@ function PuntoDeVenta() {
                   S/ {Number(ticket.total).toFixed(2)}
                 </span>
               </div>
-
-              {/* Gracias */}
               <div style={{
                 textAlign: "center",
                 marginTop: "var(--space-lg)",

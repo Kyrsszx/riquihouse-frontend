@@ -7,24 +7,21 @@ import "../styles/productos.css";
 import "../styles/table.css";
 import "../styles/modal.css";
 
-// ── Umbral de stock mínimo para productos finales ───────────────
 const STOCK_MINIMO_PRODUCTO = 5;
 
 function Productos() {
   const [productos, setProductos]       = useState([]);
-  const [alertas, setAlertas]           = useState([]);   // CA1
+  const [alertas, setAlertas]           = useState([]);
   const [modalCrear, setModalCrear]     = useState(false);
   const [productoEditar, setProductoEditar] = useState(null);
   const [productoAEliminar, setProductoAEliminar] = useState(null);
 
   useEffect(() => { cargarProductos(); }, []);
-
-  // CA1 — detecta stock bajo cada vez que se cargan productos
   const cargarProductos = async () => {
     const data = await obtenerProductos();
     setProductos(data);
     const bajoStock = data.filter(p => parseInt(p.stock_actual) < STOCK_MINIMO_PRODUCTO);
-    setAlertas(bajoStock); // CA3 — se recalcula automáticamente
+    setAlertas(bajoStock);
   };
 
   const borrarProducto = async () => {
@@ -36,8 +33,6 @@ function Productos() {
 
   return (
     <div className="animate-in">
-
-      {/* ── Cabecera ── */}
       <div className="page-header">
         <div className="page-header-left">
           <h1 className="page-title">Vitrina de <span>Productos</span></h1>
@@ -49,8 +44,6 @@ function Productos() {
           </button>
         </div>
       </div>
-
-      {/* ── CA2 — Banner de alerta de stock bajo ── */}
       {alertas.length > 0 && (
         <div style={{
           background: "rgba(192, 57, 43, 0.08)",
@@ -89,8 +82,6 @@ function Productos() {
           </p>
         </div>
       )}
-
-      {/* ── Tabla de productos con badge de stock bajo ── */}
       <div className="table-container">
         <div className="table-toolbar">
           <div className="table-toolbar-left">
@@ -160,8 +151,6 @@ function Productos() {
           </tbody>
         </table>
       </div>
-
-      {/* ── Modal: crear producto ── */}
       {modalCrear && (
         <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && setModalCrear(false)}>
           <div className="modal">
@@ -180,8 +169,6 @@ function Productos() {
           </div>
         </div>
       )}
-
-      {/* ── Modal: editar producto ── */}
       {productoEditar && (
         <ProductModal
           producto={productoEditar}
@@ -189,8 +176,6 @@ function Productos() {
           recargarProductos={cargarProductos}
         />
       )}
-
-      {/* ── Modal: confirmar eliminar ── */}
       {productoAEliminar && (
         <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && setProductoAEliminar(null)}>
           <div className="modal modal-sm">

@@ -11,16 +11,14 @@ function Sidebar() {
   const rol = usuario.rol.toLowerCase();
 
   const cerrarSesion = () => {
-    localStorage.removeItem("usuarioLogueado");
+    localStorage.removeItem("usuarioLogueado");    
     window.location.href = "/login";
   };
-
-  const isActive = (path) => location.pathname === path;
+  
+  const isActive = (path) => location.pathname = path;
 
   return (
     <aside className="sidebar">
-
-      {/* MARCA */}
       <div className="sidebar-brand">
         <div className="sidebar-brand-icon">🍰</div>
         <div className="sidebar-brand-text">
@@ -28,8 +26,6 @@ function Sidebar() {
           <span className="sidebar-brand-tagline">Pasteleria Artesanal</span>
         </div>
       </div>
-
-      {/* PERFIL */}
       <div style={{ padding: "16px 12px 8px", borderBottom: "1px solid var(--border-subtle)" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 12px", background: "var(--bg-elevated)", borderRadius: "var(--radius-md)", border: "1px solid var(--border-subtle)" }}>
           <div className="navbar-avatar">
@@ -45,11 +41,7 @@ function Sidebar() {
           </div>
         </div>
       </div>
-
-      {/* NAVEGACIÓN */}
       <nav className="sidebar-nav">
-
-        {/* ADMINISTRADOR */}
         {rol === "administrador" && (
           <>
             <span className="sidebar-section-label">Panel Admin</span>
@@ -71,8 +63,6 @@ function Sidebar() {
             </Link>
           </>
         )}
-
-        {/* VENDEDOR */}
         {rol === "vendedor" && (
           <>
             <span className="sidebar-section-label">Área de Ventas</span>
@@ -82,8 +72,6 @@ function Sidebar() {
             </Link>
           </>
         )}
-
-        {/* COCINERO */}
         {rol === "cocinero" && (
           <>
             <span className="sidebar-section-label">Cocina</span>
@@ -103,8 +91,6 @@ function Sidebar() {
         )}
 
       </nav>
-
-      {/* CERRAR SESIÓN */}
       <div className="sidebar-footer">
         <button className="sidebar-logout" onClick={cerrarSesion}>
           <span></span>

@@ -1,22 +1,18 @@
 import { useState, useEffect } from "react";
 import { crearProducto } from "../services/productoService";
-import { obtenerInsumos } from "../services/insumoService"; // <-- Nuevo
-import { crearReceta } from "../services/recetaService"; // <-- Nuevo
+import { obtenerInsumos } from "../services/insumoService";
+import { crearReceta } from "../services/recetaService";
 import "../styles/productos.css";
 
 function FormProducto({ recargarProductos }) {
-  // Estados originales del producto
   const [nombre, setNombre] = useState("");
   const [precio, setPrecio] = useState("");
   const [stock, setStock] = useState("");
-
-  // NUEVOS Estados para la Receta
-  const [insumosBD, setInsumosBD] = useState([]); // Los insumos que vienen del backend
-  const [ingredientesTemp, setIngredientesTemp] = useState([]); // La lista temporal en pantalla
+  const [insumosBD, setInsumosBD] = useState([]);
+  const [ingredientesTemp, setIngredientesTemp] = useState([]);
   const [idInsumoSeleccionado, setIdInsumoSeleccionado] = useState("");
   const [cantidadInsumo, setCantidadInsumo] = useState("");
 
-  // Al abrir el modal, cargamos los insumos del almacén
   useEffect(() => {
     const cargarInsumos = async () => {
       const data = await obtenerInsumos();
@@ -26,7 +22,6 @@ function FormProducto({ recargarProductos }) {
     cargarInsumos();
   }, []);
 
-  // Función para ir armando la lista en pantalla (Aún no va a la BD)
   const agregarIngredienteTemporal = () => {
     if (!idInsumoSeleccionado || !cantidadInsumo) return;
 
@@ -38,16 +33,14 @@ function FormProducto({ recargarProductos }) {
       cantidad_necesaria: parseFloat(cantidadInsumo)
     }]);
 
-    setCantidadInsumo(""); // Limpiamos el campito de cantidad
+    setCantidadInsumo("");
   };
 
-  // Por si te equivocas y quieres quitar un ingrediente de la lista
   const quitarIngrediente = (index) => {
     const nuevaLista = ingredientesTemp.filter((_, i) => i !== index);
     setIngredientesTemp(nuevaLista);
   };
 
-  // LA MAGIA: Guardar todo junto
   const manejarSubmit = async (e) => {
     e.preventDefault();
 
@@ -58,13 +51,8 @@ function FormProducto({ recargarProductos }) {
     };
 
     try {
-      // 1. Guardamos el producto en la BD
       const responseProducto = await crearProducto(nuevoProducto);
-      
-      // Capturamos el ID del nuevo producto (Asegúrate de que tu backend envíe el ID de vuelta)
       const idNuevoProducto = responseProducto.id_producto || responseProducto.insertId || responseProducto.id;
-
-      // 2. Si guardamos ingredientes en la lista temporal, los disparamos a la BD
       if (idNuevoProducto && ingredientesTemp.length > 0) {
         for (let i = 0; i < ingredientesTemp.length; i++) {
           await crearReceta({
@@ -76,11 +64,9 @@ function FormProducto({ recargarProductos }) {
       }
 
       alert("¡Producto y receta creados con éxito! 🚀");
-
-      // 3. Limpiamos todo y cerramos el modal
       setNombre(""); setPrecio(""); setStock("");
       setIngredientesTemp([]);
-      recargarProductos(); // Esto también cerrará el modal si José lo configuró así
+      recargarProductos();
 
     } catch (error) {
       console.error(error);
@@ -110,7 +96,6 @@ function FormProducto({ recargarProductos }) {
           </div>
         </div>
 
-        {/* --- SECCIÓN DE RECETA INTEGRADA --- */}
         <div style={{ background: "#f0f8ff", padding: "15px", borderRadius: "8px", marginBottom: "15px", border: "1px solid #cce5ff" }}>
           <h4 style={{ marginTop: 0, color: "#004085" }}>🥣 Receta (Ingredientes)</h4>
           
@@ -129,13 +114,11 @@ function FormProducto({ recargarProductos }) {
               style={{ flex: 1, padding: "8px", borderRadius: "4px", border: "1px solid #ccc" }}
             />
             
-            {/* type="button" es vital para que no se mande el formulario completo al darle clic */}
             <button type="button" onClick={agregarIngredienteTemporal} className="btn btn-secondary" style={{ background: "#6c757d" }}>
               Añadir
             </button>
           </div>
 
-          {/* LISTA TEMPORAL DE INGREDIENTES */}
           {ingredientesTemp.length > 0 && (
             <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
               {ingredientesTemp.map((ing, index) => (

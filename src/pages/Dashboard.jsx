@@ -20,8 +20,6 @@ function Dashboard() {
   const [ticketsHoy, setTicketsHoy]               = useState(0);
   const [ventaSeleccionada, setVentaSeleccionada] = useState(null);
   const [cargando, setCargando]                   = useState(true);
-
-  // Redirecciones por rol
   if (usuario && usuario.rol === "vendedor") return <Navigate to="/ventas" />;
   if (usuario && usuario.rol === "cocinero") return <Navigate to="/tablero-cocina" />;
 
@@ -36,7 +34,6 @@ function Dashboard() {
         obtenerProductos(),
         obtenerInsumos(),
         obtenerProduccion(),
-        // Intenta con detalle (JOIN); si falla usa lista simple
         obtenerVentasConDetalle().catch(() => obtenerVentas()),
       ]);
 
@@ -73,8 +70,6 @@ function Dashboard() {
 
   return (
     <div className="animate-in">
-
-      {/* ── Cabecera ── */}
       <div className="dashboard-header">
         <div>
           <p className="dashboard-greeting">Bienvenido 👋</p>
@@ -84,8 +79,6 @@ function Dashboard() {
           {cargando ? "Cargando..." : "↻ Actualizar"}
         </button>
       </div>
-
-      {/* ── Stats ── */}
       <div className="stats-grid">
 
         <div className="stat-card">
@@ -132,10 +125,7 @@ function Dashboard() {
           <div className="stat-value">{totalProduccion}</div>
           <span className="stat-change flat">Lotes horneados</span>
         </div>
-
       </div>
-
-      {/* ── Tabla ventas recientes ── */}
       <div className="table-container" style={{ marginTop: "var(--space-xl)" }}>
 
         <div className="table-toolbar">
@@ -215,8 +205,6 @@ function Dashboard() {
           </tbody>
         </table>
       </div>
-
-      {/* ── Modal detalle de venta ── */}
       {ventaSeleccionada && (
         <div
           className="modal-overlay"
@@ -233,17 +221,12 @@ function Dashboard() {
               </div>
               <button className="modal-close" onClick={() => setVentaSeleccionada(null)}>✕</button>
             </div>
-
             <div className="modal-body">
-
-              {/* Logo */}
               <div style={{ textAlign: "center", paddingBottom: "var(--space-md)", borderBottom: "1px dashed var(--border-default)", marginBottom: "var(--space-md)" }}>
                 <div style={{ fontSize: "1.8rem", marginBottom: "4px" }}>🥐</div>
                 <div style={{ fontFamily: "var(--font-display)", fontSize: "1.3rem", color: "var(--text-primary)", letterSpacing: "0.06em" }}>RiquiHouse</div>
                 <div style={{ fontSize: "0.7rem", color: "var(--text-muted)", letterSpacing: "0.1em", textTransform: "uppercase" }}>Panadería & Pastelería</div>
               </div>
-
-              {/* Datos */}
               <div style={{ display: "flex", flexDirection: "column", gap: "6px", marginBottom: "var(--space-md)" }}>
                 {[
                   ["N° Ticket",  `#${String(ventaSeleccionada.id_venta).padStart(5, "0")}`],
@@ -256,10 +239,7 @@ function Dashboard() {
                   </div>
                 ))}
               </div>
-
               <div style={{ borderTop: "1px dashed var(--border-default)", margin: "var(--space-md) 0" }} />
-
-              {/* Ítems */}
               {ventaSeleccionada.detalles && ventaSeleccionada.detalles.length > 0 ? (
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                   {ventaSeleccionada.detalles.map((d, i) => (
@@ -284,8 +264,6 @@ function Dashboard() {
                   </p>
                 </div>
               )}
-
-              {/* Total */}
               <div style={{
                 borderTop: "1px dashed var(--border-default)",
                 paddingTop: "var(--space-md)",

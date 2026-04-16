@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-
 import AdminLayout from "../layouts/AdminLayout";
 import Dashboard from "../pages/Dashboard";
 import Productos from "../pages/Productos";
@@ -16,7 +15,6 @@ function AppRouter() {
   const [estaLogueado, setEstaLogueado] = useState(false);
 
   useEffect(() => {
-    // Al cargar la app, revisamos si ya hay alguien guardado en memoria
     const usuario = localStorage.getItem("usuarioLogueado");
     if (usuario) {
       setEstaLogueado(true);
@@ -26,17 +24,13 @@ function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Ruta Pública: Cualquier persona puede ver el Login */}
         <Route 
           path="/login" 
           element={<Login onLogin={() => setEstaLogueado(true)} />} 
         />
-
-        {/* Rutas Privadas: El "Guardia de Seguridad" */}
         <Route 
           element={estaLogueado ? <AdminLayout /> : <Navigate to="/login" />}
         >
-          {/* Todas las pantallas del sistema */}
           <Route path="/" element={<Dashboard />} />
           <Route path="/productos" element={<Productos />} />
           <Route path="/ventas" element={<PuntoDeVenta />} />
